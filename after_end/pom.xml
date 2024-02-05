@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>wuhu.qifei</groupId>
-    <artifactId>ktCat</artifactId>
+    <artifactId>after_end</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ktCat</name>
     <description>ktCat</description>
