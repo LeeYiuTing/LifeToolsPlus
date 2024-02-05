@@ -1,4 +1,4 @@
-package wuhu.qifei.ktcat.util;
+package wuhu.qifei.ktcat.webs.resp;
 
 public class Resp<T> {
     private String code;

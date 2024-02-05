@@ -1,6 +1,12 @@
-package wuhu.qifei.ktcat.util;
+package wuhu.qifei.ktcat.webs.base;
 
-public class Common {
+import wuhu.qifei.ktcat.webs.resp.Resp;
+
+/**
+ * Controller通用方法
+ * @author LeeYiuTing
+ */
+public class BaseController {
 
     public static <T> Resp<T> packResp(String code, String msg, T data) {
         Resp<T> resp = new Resp<T>();
@@ -9,5 +15,4 @@ public class Common {
         resp.setData(data);
         return resp;
     }
-
 }

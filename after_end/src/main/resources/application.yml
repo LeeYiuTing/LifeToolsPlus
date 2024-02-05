@@ -1,8 +1,6 @@
 server:
   port: 8023
 spring:
-  mvc:
-    static-path-pattern: /static/**
   data:
     redis:
       port: 6379

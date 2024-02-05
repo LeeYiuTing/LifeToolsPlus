@@ -1,4 +1,4 @@
-package wuhu.qifei.ktcat.controller;
+package wuhu.qifei.ktcat.webs.func;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,19 +10,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import wuhu.qifei.ktcat.pojo.Task;
 import wuhu.qifei.ktcat.util.RedisConstant;
-import wuhu.qifei.ktcat.util.Resp;
+import wuhu.qifei.ktcat.webs.resp.Resp;
+import wuhu.qifei.ktcat.webs.base.BaseController;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-import static wuhu.qifei.ktcat.util.Common.packResp;
 import static wuhu.qifei.ktcat.util.GsonUtils.JSON_TO_OBJ;
 
+/**
+ * TodoList
+ * 待办事项的控制器
+ */
 @RestController
-@RequestMapping("/todo")
-public class TodoListController {
+@RequestMapping("/todolist")
+public class TodoListController extends BaseController {
     private final StringRedisTemplate redisTemplate;
 
     @Autowired
@@ -30,11 +34,6 @@ public class TodoListController {
         this.redisTemplate = redisTemplate;
     }
 
-    @RequestMapping("/index")
-    public String method1() throws Exception {
-
-        return "index";
-    }
 
     // 获取任务列表
     @RequestMapping("/list")

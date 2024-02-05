@@ -1,12 +1,12 @@
-package wuhu.qifei.ktcat.util;
+package wuhu.qifei.ktcat.webs.base;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import wuhu.qifei.ktcat.webs.resp.Resp;
 
-import static wuhu.qifei.ktcat.util.Common.packResp;
 
 @RestControllerAdvice
-public class ExceptionHandle {
+public class ExceptionHandle extends BaseController {
 
     @ExceptionHandler(value = Exception.class)
     public Resp<String> handle(Exception e) {
