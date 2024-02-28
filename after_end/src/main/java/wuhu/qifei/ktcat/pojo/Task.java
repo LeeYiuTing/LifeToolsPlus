@@ -1,14 +1,31 @@
 package wuhu.qifei.ktcat.pojo;
 
+import wuhu.qifei.ktcat.anno.FieldInfo;
+import wuhu.qifei.ktcat.anno.FieldType;
+import wuhu.qifei.ktcat.anno.TableName;
+
+@TableName
 public class Task {
+
+    @FieldInfo(type = FieldType.VARCHAR, length = 64, desc = "唯一码")
     private String uniqueCode;
+
+    @FieldInfo(type = FieldType.VARCHAR, length = 20, desc = "任务名称")
     private String name;
+
+    @FieldInfo(type = FieldType.INT, length = 20, desc = "创建时间")
     private Long createTime;
+
+    @FieldInfo(type = FieldType.INT, length = 20, desc = "更新时间")
     private Long updateTime;
+
+    @FieldInfo(type = FieldType.TINYINT, length = 2, desc = "状态")
     private Integer status;
+
+    @FieldInfo(type = FieldType.VARCHAR, length = 200, desc = "描述")
     private String description;
 
-    //1:单次 2:周期
+    @FieldInfo(type = FieldType.TINYINT, length = 2, desc = "任务类型| 1:单次 2:周期")
     private Integer taskType;
 
 
