@@ -21,6 +21,7 @@ public class GoOutThingsController extends BaseController {
     // 获取出门备忘清单
     @PostMapping("/getMyGoOutThings")
     public Resp<String> getGoOutList() {
+        int a = 1/0;
        return null;
     }
 

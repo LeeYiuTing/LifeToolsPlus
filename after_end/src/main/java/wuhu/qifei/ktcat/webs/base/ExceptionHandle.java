@@ -10,8 +10,8 @@ import wuhu.qifei.ktcat.webs.resp.Resp;
 @RestControllerAdvice
 public class ExceptionHandle extends BaseController {
 
-    //@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    //@ExceptionHandler(value = Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = Exception.class)
     public Resp<String> handle(Exception e) {
         System.out.println(e.getMessage());
         return packResp("500", e.getMessage(), null);

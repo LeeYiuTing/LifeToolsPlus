@@ -1,8 +1,8 @@
-package wuhu.qifei.ktcat;
+package wuhu.qifei.ktcat.springApplicationStart;
 
 import cn.hutool.core.lang.ClassScanner;
-import wuhu.qifei.ktcat.anno.FieldInfo;
-import wuhu.qifei.ktcat.anno.TableName;
+import wuhu.qifei.ktcat.common.anno.FieldInfo;
+import wuhu.qifei.ktcat.common.anno.TableName;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;

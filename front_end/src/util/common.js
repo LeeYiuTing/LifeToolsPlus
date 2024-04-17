@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {showConfirmDialog, showFailToast, showSuccessToast, showToast} from 'vant';
 
 let module = {};
 
@@ -8,13 +9,37 @@ const server = 'http://localhost:8023/';
 module.post = (options) => {
     let {url, params, success, fail} = options;
     url = server + url;
-    return new Promise((success, fail) => {
-        axios.post(url, params).then(res => {
-            success && success(res);
-        }).catch(err => {
-            fail && fail(err);
-        });
+    axios.post(url, params).then(res => {
+        success && success(res);
+    }).catch(err => {
+        fail && fail(err);
     });
+}
+
+/**
+ * 展示提示方法
+ * @param msg 文字
+ * @param type 类型
+ * @param icon 图标
+ */
+module.showTips = (msg, type, icon) => {
+    if (!type && !icon) {
+        //仅文字
+        showToast(msg);
+    } else if (msg && icon) {
+        //文字和图标
+        showToast({
+            message: msg,
+            icon: icon,
+        });
+    } else if (msg && type) {
+        //文字和类型
+        if (type === 'success') {
+            showSuccessToast(msg);
+        } else if (type === 'fail') {
+            showFailToast(msg);
+        }
+    }
 }
 
 export default module;

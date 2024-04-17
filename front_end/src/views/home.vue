@@ -2,11 +2,11 @@
     <div class="home">
         <van-notice-bar
             left-icon="volume-o"
-            text="你爱我 我爱你 蜜雪冰城甜蜜蜜"
+            text="你爱我 我爱你 蜜雪冰城甜蜜蜜 I love you , You love me MIXUE Ice cream and tea"
         />
 
         <van-cell-group inset title="我要出门啦">
-            <van-cell v-for="(item,index) in taskList" :title="item.title" @click="goToNew">
+            <van-cell v-for="(item,index) in taskList" :title="item.title">
                 <template #right-icon>
                     <div>
                         <van-switch v-model="item.status" @click.stop="switchStatus"/>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import {showConfirmDialog, showToast} from 'vant';
+import {showConfirmDialog} from 'vant';
 import {showDialog} from 'vant';
 import common from "../util/common";
 
@@ -46,6 +46,7 @@ export default {
     },
     data() {
         return {
+            goStatus: false,
             checkedAll: false,
             status: false,
             itemNum: 0,
@@ -102,7 +103,7 @@ export default {
 
         //确认出发提示
         confirmGo() {
-            showToast('出发啦！');
+            common.showTips('出发啦！');
         },
 
         //获取我要出门的东西
@@ -112,6 +113,11 @@ export default {
                 params: {},
                 success: (res) => {
                     console.log('请求成功', res.data);
+                    this.goStatus = true;
+                },
+                fail: (e) => {
+                    common.showTips('请求失败', 'fail')
+                    console.log('操作失败', e);
                 }
             })
         }

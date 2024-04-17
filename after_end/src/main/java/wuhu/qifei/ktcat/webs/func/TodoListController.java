@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import wuhu.qifei.ktcat.pojo.Task;
-import wuhu.qifei.ktcat.util.RedisConstant;
+import wuhu.qifei.ktcat.common.enumType.RedisConstant;
 import wuhu.qifei.ktcat.webs.resp.Resp;
 import wuhu.qifei.ktcat.webs.base.BaseController;
 
@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-import static wuhu.qifei.ktcat.util.GsonUtils.JSON_TO_OBJ;
+import static wuhu.qifei.ktcat.common.util.GsonUtils.JSON_TO_OBJ;
 
 /**
  * TodoList

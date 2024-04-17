@@ -1,4 +1,6 @@
-package wuhu.qifei.ktcat.anno;
+package wuhu.qifei.ktcat.common.anno;
+
+import wuhu.qifei.ktcat.common.enumType.FieldType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

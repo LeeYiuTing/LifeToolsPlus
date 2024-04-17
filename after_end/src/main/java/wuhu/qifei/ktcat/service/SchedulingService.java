@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import wuhu.qifei.ktcat.pojo.Task;
-import wuhu.qifei.ktcat.util.RedisConstant;
+import wuhu.qifei.ktcat.common.enumType.RedisConstant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +15,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static wuhu.qifei.ktcat.util.GsonUtils.OBJ_TO_JSON;
-import static wuhu.qifei.ktcat.util.GsonUtils.JSON_TO_OBJ;
+import static wuhu.qifei.ktcat.common.util.GsonUtils.OBJ_TO_JSON;
+import static wuhu.qifei.ktcat.common.util.GsonUtils.JSON_TO_OBJ;
 
 @Component
 public class SchedulingService {

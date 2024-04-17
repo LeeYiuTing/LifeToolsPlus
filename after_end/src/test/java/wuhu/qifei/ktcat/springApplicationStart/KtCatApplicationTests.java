@@ -1,4 +1,4 @@
-package wuhu.qifei.ktcat;
+package wuhu.qifei.ktcat.springApplicationStart;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

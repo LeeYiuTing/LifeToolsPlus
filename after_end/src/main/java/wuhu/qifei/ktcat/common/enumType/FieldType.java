@@ -1,4 +1,4 @@
-package wuhu.qifei.ktcat.anno;
+package wuhu.qifei.ktcat.common.enumType;
 
 
 /**

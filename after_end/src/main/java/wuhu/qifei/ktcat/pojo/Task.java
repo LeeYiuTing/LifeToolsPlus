@@ -1,8 +1,8 @@
 package wuhu.qifei.ktcat.pojo;
 
-import wuhu.qifei.ktcat.anno.FieldInfo;
-import wuhu.qifei.ktcat.anno.FieldType;
-import wuhu.qifei.ktcat.anno.TableName;
+import wuhu.qifei.ktcat.common.anno.FieldInfo;
+import wuhu.qifei.ktcat.common.enumType.FieldType;
+import wuhu.qifei.ktcat.common.anno.TableName;
 
 @TableName
 public class Task {

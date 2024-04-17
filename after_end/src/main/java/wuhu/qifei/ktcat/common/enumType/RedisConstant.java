@@ -1,10 +1,13 @@
-package wuhu.qifei.ktcat.util;
+package wuhu.qifei.ktcat.common.enumType;
 
 public enum RedisConstant {
 
-    TASK_MAP("task.map", "任务列表");
-    private String key;
-    private String desc;
+    TASK_MAP("task.map", "任务列表")
+    ;
+
+
+    private final String key;
+    private final String desc;
 
     RedisConstant(String key, String desc) {
         this.key = key;
