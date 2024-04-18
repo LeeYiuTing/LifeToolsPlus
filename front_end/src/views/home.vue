@@ -46,7 +46,6 @@ export default {
     },
     data() {
         return {
-            goStatus: false,
             checkedAll: false,
             status: false,
             itemNum: 0,
@@ -113,12 +112,7 @@ export default {
                 params: {},
                 success: (res) => {
                     console.log('请求成功', res.data);
-                    this.goStatus = true;
                 },
-                fail: (e) => {
-                    common.showTips('请求失败', 'fail')
-                    console.log('操作失败', e);
-                }
             })
         }
 

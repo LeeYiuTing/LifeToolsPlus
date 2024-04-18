@@ -2,9 +2,26 @@ server:
   port: 8023
   error:
     include-message: always
+  address: 127.0.0.1
+
 spring:
   data:
     redis:
       port: 6379
       database: 0
       password:
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:test.db
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  type-aliases-package: com.example.demo.entity
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true

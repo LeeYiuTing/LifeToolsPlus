@@ -12,6 +12,7 @@ module.post = (options) => {
     axios.post(url, params).then(res => {
         success && success(res);
     }).catch(err => {
+        module.showTips(err.msg, 'fail')
         fail && fail(err);
     });
 }
