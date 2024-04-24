@@ -12,7 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author LeeYiuTing
- * @since 2024-04-18
+ * @since 2024-04-24
  */
 @ApiModel(value = "Task对象", description = "")
 public class Task implements Serializable {
@@ -26,15 +26,9 @@ public class Task implements Serializable {
 
     private String name;
 
-    private Integer createTime;
-
     private Integer updateTime;
 
-    private Integer status;
-
     private String description;
-
-    private Integer taskType;
 
     public Integer getId() {
         return id;
@@ -60,28 +54,12 @@ public class Task implements Serializable {
         this.name = name;
     }
 
-    public Integer getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Integer createTime) {
-        this.createTime = createTime;
-    }
-
     public Integer getUpdateTime() {
         return updateTime;
     }
 
     public void setUpdateTime(Integer updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     public String getDescription() {
@@ -92,25 +70,14 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-    public Integer getTaskType() {
-        return taskType;
-    }
-
-    public void setTaskType(Integer taskType) {
-        this.taskType = taskType;
-    }
-
     @Override
     public String toString() {
         return "Task{" +
             "id = " + id +
             ", uniqueCode = " + uniqueCode +
             ", name = " + name +
-            ", createTime = " + createTime +
             ", updateTime = " + updateTime +
-            ", status = " + status +
             ", description = " + description +
-            ", taskType = " + taskType +
         "}";
     }
 }
