@@ -1,6 +1,6 @@
 package site.psvm.service.impl;
 
-import site.psvm.pojo.Task;
+import site.psvm.entity.Task;
 import site.psvm.mapper.TaskMapper;
 import site.psvm.service.ITaskService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

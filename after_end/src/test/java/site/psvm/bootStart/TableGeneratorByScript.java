@@ -78,7 +78,7 @@ public class TableGeneratorByScript {
                     } else {
                         String[] columns = scriptRow.split(",");
                         if (columns.length < 4) {
-                            throw new IllegalArgumentException("Invalid script format");
+                            throw new IllegalArgumentException("Invalid script format: "+tableName);
                         }
                         for (String column : columns) {
                             if (column.isEmpty()) {
@@ -156,9 +156,13 @@ public class TableGeneratorByScript {
         //数据源配置
         fastAutoGenerator.dataSourceConfig(builder -> builder.typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {
             int typeCode = metaInfo.getJdbcType().TYPE_CODE;
+            String typeName = metaInfo.getTypeName();
+            // 自定义类型转换
             if (typeCode == Types.SMALLINT) {
-                // 自定义类型转换
                 return DbColumnType.INTEGER;
+            }
+            if (typeName.equals("BIGINT")) {
+                return DbColumnType.LONG;
             }
             return typeRegistry.getColumnType(metaInfo);
         }));
@@ -167,7 +171,7 @@ public class TableGeneratorByScript {
         fastAutoGenerator.packageConfig(builder -> {
             builder.parent("site.psvm") // 设置父包名
                     .controller("webs.func")
-                    .entity("pojo")
+                    .entity("entity")
                     .pathInfo(Collections.singletonMap(OutputFile.xml, "D:\\D_DEV\\Project\\LifeToolsPlus\\after_end\\src\\main\\resources\\mapper")); // 设置mapperXml生成路径
         });
 
@@ -177,20 +181,17 @@ public class TableGeneratorByScript {
                     .addTablePrefix("t_", "c_"); // 设置过滤表前缀
         }).templateEngine(new FreemarkerTemplateEngine()); // 使用Freemarker引擎模板，默认的是Velocity引擎模板
 
+        fastAutoGenerator.strategyConfig(builder -> {
+            builder.entityBuilder()
+                    .enableFileOverride()// 开启覆盖文件
+                    .enableActiveRecord();// 开启 ActiveRecord 模式
+        });
+
         fastAutoGenerator.execute();
     }
 
+    //将驼峰命名转换为下划线命名
     private static String toSnakeCase(String input) {
         return input.replaceAll("([a-z0-9])([A-Z])", "$1_$2").toLowerCase();
-    }
-
-    private static String getSqlType(String javaType) {
-        String result = switch (javaType) {
-            case "String" -> "TEXT";
-            case "int", "Integer" -> "INTEGER";
-            case "double", "Double" -> "REAL";
-            default -> "TEXT"; // Default to TEXT if type not recognized
-        };
-        return result;
     }
 }

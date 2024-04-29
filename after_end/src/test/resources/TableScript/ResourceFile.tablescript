@@ -1,0 +1,6 @@
+@resource_file
+unique_code,varchar,64,唯一码
+name,varchar,200,文件名
+tags,varchar,200,标签json
+file,varchar,300,文件信息json
+file_type,int,3,文件类型

@@ -1,6 +1,6 @@
 package site.psvm.mapper;
 
-import site.psvm.pojo.Task;
+import site.psvm.entity.Task;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

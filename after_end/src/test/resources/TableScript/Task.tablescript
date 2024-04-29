@@ -3,3 +3,4 @@ unique_code,varchar,64,唯一码
 name,varchar,20,任务名称
 update_time,bigint,20,更新时间
 description,varchar,255,任务描述
+task_type,int,3,任务类型

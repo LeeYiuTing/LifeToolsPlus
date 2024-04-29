@@ -1,10 +1,10 @@
-package site.psvm.pojo;
+package site.psvm.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
@@ -12,10 +12,10 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author LeeYiuTing
- * @since 2024-04-24
+ * @since 2024-04-29
  */
 @ApiModel(value = "Task对象", description = "")
-public class Task implements Serializable {
+public class Task extends Model<Task> {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,9 +26,15 @@ public class Task implements Serializable {
 
     private String name;
 
-    private Integer updateTime;
+    private Long updateTime;
 
     private String description;
+
+    private Integer taskType;
+
+    private Integer status;
+
+    private Long createTime;
 
     public Integer getId() {
         return id;
@@ -54,11 +60,11 @@ public class Task implements Serializable {
         this.name = name;
     }
 
-    public Integer getUpdateTime() {
+    public Long getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Integer updateTime) {
+    public void setUpdateTime(Long updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -70,6 +76,35 @@ public class Task implements Serializable {
         this.description = description;
     }
 
+    public Integer getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(Integer taskType) {
+        this.taskType = taskType;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
+
+    @Override
+    public Serializable pkVal() {
+        return this.id;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -78,6 +113,9 @@ public class Task implements Serializable {
             ", name = " + name +
             ", updateTime = " + updateTime +
             ", description = " + description +
+            ", taskType = " + taskType +
+            ", status = " + status +
+            ", createTime = " + createTime +
         "}";
     }
 }

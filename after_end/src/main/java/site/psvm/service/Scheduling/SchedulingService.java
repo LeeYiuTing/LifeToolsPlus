@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import site.psvm.common.enumType.RedisConstant;
-import site.psvm.tableConfigPojo.Task;
+import site.psvm.entity.Task;
 
 import java.util.ArrayList;
 import java.util.List;
