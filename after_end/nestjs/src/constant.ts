@@ -4,6 +4,8 @@ export const isDev = process.env.NODE_ENV === 'development';
 
 export const excludePaths = ['/.well-known/immich', '/custom.css', '/favicon.ico'];
 
+export const APP_MEDIA_LOCATION = process.env.MEDIA_LOCATION || './upload';
+
 export enum QueueName {
   THUMBNAIL_GENERATION = 'thumbnailGeneration',
   METADATA_EXTRACTION = 'metadataExtraction',

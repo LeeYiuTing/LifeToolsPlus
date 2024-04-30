@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty, IsOptional, IsUUID, ValidateIf, ValidationOptions } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { applyDecorators } from '@nestjs/common';
+import { applyDecorators, Injectable, FileValidator } from '@nestjs/common';
 import sanitize from 'sanitize-filename';
 
 export class UUIDParamDto {
@@ -65,3 +65,22 @@ export const toEmail = ({ value }: IValue) => value?.toLowerCase();
 
 export const toSanitized = ({ value }: IValue) => sanitize((value || '').replaceAll('.', ''));
 
+@Injectable()
+export class FileNotEmptyValidator extends FileValidator {
+  constructor(private requiredFields: string[]) {
+    super({});
+    this.requiredFields = requiredFields;
+  }
+
+  isValid(files?: any): boolean {
+    if (!files) {
+      return false;
+    }
+
+    return this.requiredFields.every((field) => files[field]);
+  }
+
+  buildErrorMessage(): string {
+    return `${this.requiredFields.join(', ')} 不能为空`;
+  }
+}
