@@ -3,13 +3,13 @@ import { Button } from 'vant';
 import { Toast } from 'vant';
 import { Dialog } from 'vant';
 import { Col, Row } from 'vant';
-
 import Vue from './App.vue';
 
 import router from './router/router';
 import common from './util/common';
 import 'vant/lib/index.css';
 import './app.less';
+import 'vant/es/toast/style'
 
 
 const app = createApp(Vue);

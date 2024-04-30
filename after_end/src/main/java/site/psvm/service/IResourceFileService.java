@@ -1,7 +1,10 @@
 package site.psvm.service;
 
+import site.psvm.dto.ResourceFileDto;
 import site.psvm.entity.ResourceFile;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IResourceFileService extends IService<ResourceFile> {
 
+    /**
+     * 获取图片列表
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    List<ResourceFileDto> getImageList(int pageNo, int pageSize);
 }

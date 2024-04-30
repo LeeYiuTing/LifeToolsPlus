@@ -1,8 +1,8 @@
 server:
-  port: 8023
+  port: 8024
+  address: 127.0.0.1
   error:
     include-message: always
-  address: 127.0.0.1
 
 spring:
   data:
@@ -13,10 +13,17 @@ spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
     url: jdbc:sqlite:test.db
+  web:
+    resources:
+      static-locations: classpath:/custom-static/
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml
-  type-aliases-package: com.example.demo.entity
+  type-aliases-package: site.psvm.entity
   global-config:
     db-config:
       id-type: auto
@@ -25,3 +32,10 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: true
+
+# 静态文件路径配置
+static-path:
+  original: /album/original/
+  originalDiskPath: D:\4 Study\nginx-1.24.0-album\html\album\original\
+  compressed: /album/compress/
+  compressedDiskPath: D:\4 Study\nginx-1.24.0-album\html\album\compress\

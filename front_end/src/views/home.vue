@@ -123,7 +123,6 @@ export default {
 <style scoped lang="less">
 .home {
     .go-button {
-        //锁死在离底部100px的位置
         position: fixed;
         bottom: 10px;
         width: 95%;

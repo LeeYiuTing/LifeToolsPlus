@@ -1,36 +1,13 @@
-package site.psvm.entity;
+package site.psvm.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.io.Serializable;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
-/**
- * <p>
- * 
- * </p>
- *
- * @author LeeYiuTing
- * @since 2024-04-29
- */
-@TableName("resource_file")
-@ApiModel(value = "ResourceFile对象", description = "")
-public class ResourceFile extends Model<ResourceFile> {
-
-    private static final long serialVersionUID = 1L;
-
-
-
+public class ResourceFileDto {
     private String uniqueCode;
 
     private String name;
 
     private String tags;
 
-    private String file;
+    private FileDto file;
 
     private Integer fileType;
 
@@ -39,7 +16,6 @@ public class ResourceFile extends Model<ResourceFile> {
     private Integer status;
 
     private Long createTime;
-
 
     public String getUniqueCode() {
         return uniqueCode;
@@ -65,11 +41,11 @@ public class ResourceFile extends Model<ResourceFile> {
         this.tags = tags;
     }
 
-    public String getFile() {
+    public FileDto getFile() {
         return file;
     }
 
-    public void setFile(String file) {
+    public void setFile(FileDto file) {
         this.file = file;
     }
 
@@ -103,21 +79,5 @@ public class ResourceFile extends Model<ResourceFile> {
 
     public void setCreateTime(Long createTime) {
         this.createTime = createTime;
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "ResourceFile{" +
-            ", uniqueCode = " + uniqueCode +
-            ", name = " + name +
-            ", tags = " + tags +
-            ", file = " + file +
-            ", fileType = " + fileType +
-            ", dealStatus = " + dealStatus +
-            ", status = " + status +
-            ", createTime = " + createTime +
-        "}";
     }
 }

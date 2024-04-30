@@ -24,26 +24,7 @@ export default {
         };
     },
     methods: {
-        handleChange(name) {
-            console.log(name)
-            this.localActive = name;
-            //this.onChange(name);
 
-            switch (name) {
-                case 'search':
-                    this.$router.push('/album',);
-                    break;
-                case 'upload':
-                    this.$router.push('/album/upload');
-                    break;
-                case 'tag':
-                    this.$router.push('/album/tag');
-                    break;
-                case 'setting':
-                    this.$router.push('/album/setting');
-                    break;
-            }
-        }
     },
     watch: {
         active(newVal) {

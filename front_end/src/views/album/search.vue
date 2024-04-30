@@ -19,10 +19,14 @@
         }
 
         .imageContainer {
-            padding: 3px 5px 0 0;
-            max-width: 33.33333333%;
-            display: block;
+            display: flex;
+            justify-content: space-between;
             box-sizing: border-box;
+            padding:3px;
+            .image{
+                width: 110px;
+                height: 80px;
+            }
         }
     }
 }
@@ -36,31 +40,22 @@
                 v-model="searchValue"
                 show-action
                 placeholder="请输入搜索关键词"
-                @search="onSearch"
+                @search="pageList"
             >
                 <template #action>
-                    <div @click="onSearch(searchValue)">搜索</div>
+                    <div @click="pageList(searchValue)">搜索</div>
                 </template>
             </van-search>
         </div>
 
 
         <!--按月分栏-->
-        <div v-for="(item, index) in 12" :key="index">
+        <div v-for="(item, index) in dateList" :key="index">
             <div class="monthColumn">
-                <div class="group-title">2024年4月</div>
+                <div class="group-title">{{ item }}</div>
                 <div class="imageGroup">
-                    <div class="imageContainer">
-                        <van-image fit="cover" src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"/>
-                    </div>
-                    <div class="imageContainer">
-                        <van-image fit="cover" src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"/>
-                    </div>
-                    <div class="imageContainer">
-                        <van-image fit="cover" src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"/>
-                    </div>
-                    <div class="imageContainer">
-                        <van-image fit="cover" src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"/>
+                    <div class="imageContainer" v-for="item in groupedByDate[item]">
+                        <van-image class="image" fit="cover" :src="item.file.previewUrl"/>
                     </div>
                 </div>
             </div>
@@ -76,33 +71,62 @@
 import common from "../../util/common";
 import {ref} from 'vue';
 import TarBar from "./components/TabBar.vue";
+import data from "../../util/data";
 
 export default {
     name: "album",
     components: {TarBar},
     setup() {
         const active = ref('home');
-
-
         const searchValue = ref('');
-        const onSearch = (value) => {
-            common.showTips(`搜索 ${value}`);
-        };
+
 
         return {
             active,
-
-
             searchValue,
-            onSearch,
         };
+    },
+    mounted() {
+        this.pageList();
     },
     data() {
         return {
             searchValue: '',
             active: '',
+            dataList:[],
+            dateList:[],
+            groupedByDate: {},
         }
     },
-    methods: {}
+    methods: {
+        pageList(keyword) {
+            let {groupedByDate} = this;
+            common.post({
+                url: '/resourceFile/list',
+                params: {},
+                success: (res) => {
+                    let list = res.data.data;
+
+                    list.forEach(item => {
+                        item.file.url = data.STATIC_SERVER + item.file.url;
+                        item.file.previewUrl = data.STATIC_SERVER + item.file.previewUrl;
+
+                        // 解析createTime并按日分组
+                        const date = new Date(item.createTime).toDateString(); // 将createTime转换为日期字符串（忽略时间部分）
+                        if (!groupedByDate[date]) {
+                            groupedByDate[date] = []; // 如果这个日期还没有初始化数组，则初始化一个
+                        }
+                        groupedByDate[date].push(item); // 将当前项添加到对应日期的数组中
+                    });
+                    console.log(groupedByDate)
+                    this.groupedByDate = groupedByDate; // 将分组后的数据赋值给dataList
+                    this.dateList = Object.keys(groupedByDate);
+                },
+                fail: (res) => {
+                    console.log('error', res);
+                }
+            })
+        }
+    }
 }
 </script>
