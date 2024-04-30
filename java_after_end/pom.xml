@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>site.psvm</groupId>
-    <artifactId>after_end</artifactId>
+    <artifactId>java_after_end</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>LifeToolsPlus</name>
     <description>LifeToolsPlus</description>
