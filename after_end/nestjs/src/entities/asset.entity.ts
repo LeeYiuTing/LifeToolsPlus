@@ -14,11 +14,25 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { TagEntity } from '@app/entities/tag.entity';
+import { AssetType } from '@app/interfaces/asset.interface';
 
 @Entity('assets')
 export class AssetEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
+
+  @Column()
+  ownerId!: string;
+
+  @Column({
+    type: "enum",
+    enum: AssetType,
+    default: AssetType.OTHER,
+  })
+  type!: AssetType;
+
+  @Column()
+  originalPath!: string;
 
   @Column({ type: 'varchar', nullable: true })
   previewPath!: string | null;
@@ -26,28 +40,34 @@ export class AssetEntity {
   @Column({ type: 'varchar', nullable: true, default: '' })
   thumbnailPath!: string | null;
 
-  @CreateDateColumn({ type: 'timestamptz' })
+  @CreateDateColumn()
   createdAt!: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz' })
+  @UpdateDateColumn()
   updatedAt!: Date;
 
-  @DeleteDateColumn({ type: 'timestamptz', nullable: true })
+  @DeleteDateColumn({ nullable: true })
   deletedAt!: Date | null;
 
-  @Column({ type: 'timestamptz' })
+  @Column()
   fileCreatedAt!: Date;
 
-  @Column({ type: 'timestamptz' })
+  @Column()
   localDateTime!: Date;
 
-  @Column({ type: 'timestamptz' })
+  @Column()
   fileModifiedAt!: Date;
+
+  @Column({ type: 'varchar', nullable: true })
+  duration!: string | null;
 
   @Column({ type: 'varchar' })
   originalFileName!: string;
 
   @ManyToMany(() => TagEntity, (tag) => tag.assets, { cascade: true })
-  @JoinTable({ name: 'tag_asset', synchronize: false })
+  // @JoinTable({ name: 'tag_asset', synchronize: false })
   tags!: TagEntity[];
+
+  // TODO
+  // jobStatus?:
 }

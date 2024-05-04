@@ -1,7 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsOptional, IsUUID, ValidateIf, ValidationOptions } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  isDateString,
+  IsNotEmpty,
+  IsOptional,
+  IsUUID,
+  ValidateIf,
+  ValidationOptions
+} from 'class-validator';
 import { Transform } from 'class-transformer';
-import { applyDecorators, Injectable, FileValidator } from '@nestjs/common';
+import { applyDecorators, Injectable, FileValidator, BadRequestException } from '@nestjs/common';
 import sanitize from 'sanitize-filename';
 
 export class UUIDParamDto {
@@ -84,3 +93,31 @@ export class FileNotEmptyValidator extends FileValidator {
     return `${this.requiredFields.join(', ')} 不能为空`;
   }
 }
+
+type DateOptions = { optional?: boolean; nullable?: boolean; format?: 'date' | 'date-time' };
+export const ValidateDate = (options?: DateOptions) => {
+  const { optional, nullable, format } = { optional: false, nullable: false, format: 'date-time', ...options };
+
+  const decorators = [
+    ApiProperty({ format }),
+    IsDate(),
+    optional ? Optional({ nullable: true }) : IsNotEmpty(),
+    Transform(({ key, value }) => {
+      if (value === null || value === undefined) {
+        return value;
+      }
+
+      if (!isDateString(value)) {
+        throw new BadRequestException(`${key} 必须是日期字符串`);
+      }
+
+      return new Date(value as string);
+    }),
+  ];
+
+  if (optional) {
+    decorators.push(Optional({ nullable }));
+  }
+
+  return applyDecorators(...decorators);
+};

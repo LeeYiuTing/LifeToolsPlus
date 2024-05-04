@@ -8,13 +8,13 @@ import {
   Body,
   UseInterceptors,
   HttpStatus,
-  Res
+  Res, Query
 } from '@nestjs/common';
 import { Auth, Authenticated } from '@app/middleware/auth.guard';
 import { AuthDto } from '@app/dtos/auth.dto';
 import { FileNotEmptyValidator } from '@app/validation';
 import { CreateAssetDto } from '@app/dtos/asset.dto';
-import { Route, UploadFiles } from '@app/interfaces/asset.interface';
+import { AssetResponseDto, AssetSearchDto, Route, UploadFiles } from '@app/interfaces/asset.interface';
 import { Response } from 'express';
 import { AssetService } from '@app/services/asset.service';
 
@@ -46,7 +46,8 @@ export class AssetController {
   @Get('/')
   getAllAssets(
     @Auth() auth: AuthDto,
-  ) {
-
+    @Query() dto: AssetSearchDto
+  ): Promise<AssetResponseDto[]> {
+    return this.service.getAllAssets(auth, dto);
   }
 }

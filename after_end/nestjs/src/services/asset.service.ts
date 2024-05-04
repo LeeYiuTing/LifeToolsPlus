@@ -1,6 +1,6 @@
 import { AuthDto } from '@app/dtos/auth.dto';
 import {
-  AssetFileUploadResponseDto, IAssetRepository,
+  AssetFileUploadResponseDto, AssetResponseDto, AssetSearchDto, IAssetRepository,
   UploadFieldName,
   UploadFile,
   UploadRequest
@@ -13,6 +13,7 @@ import sanitize from 'sanitize-filename';
 import { StorageCore, StorageFolder } from '@app/cores/storage.core';
 import { IStorageRepository } from '@app/interfaces/storage.interface';
 import { CreateAssetDto } from '@app/dtos/asset.dto';
+import { AssetEntity } from '@app/entities/asset.entity';
 
 export class AssetService {
   private logger = new Logger(AssetService.name);
@@ -71,8 +72,13 @@ export class AssetService {
   ): Promise<AssetFileUploadResponseDto> {
     try {
       const asset = await this.create(auth, { ...dto }, file);
-    } catch (e) {
 
+      return { id: asset.id, duplicate: false };
+    } catch (e) {
+      // TODO clean up files
+
+      this.logger.error(`Error uploading file ${e}`, e?.stack);
+      throw e;
     }
   }
 
@@ -82,7 +88,47 @@ export class AssetService {
     file: UploadFile,
   ) {
     const asset = await this.assetRepository.create({
+      ownerId: auth.user.id,
 
+      originalPath: file.originalPath,
+      originalFileName: file.originalName,
+
+      fileCreatedAt: dto.fileCreatedAt,
+      fileModifiedAt: dto.fileModifiedAt,
+      localDateTime: dto.fileCreatedAt,
+
+      type: mimeTypes.assetType(file.originalPath),
+      duration: dto.duration || null,
     })
+
+    await this.storageRepository.utimes(file.originalPath, new Date(), new Date(dto.fileModifiedAt));
+
+    // TODO 队列处理图片链接
+
+    return asset;
+  }
+
+  public async getAllAssets(auth: AuthDto, dto: AssetSearchDto): Promise<AssetResponseDto[]> {
+    const userId = dto.userId || auth.user.id;
+    const assets = await this.assetRepository.getAllByUserId(userId, dto);
+    return assets.map((asset: AssetEntity) => {
+      return {
+        id: asset.id,
+        ownerId: asset.ownerId,
+        type: asset.type,
+        resized: !!asset.previewPath,
+        originalPath: asset.originalPath,
+        thumbnailPath: asset.thumbnailPath,
+        createdAt: asset.createdAt,
+        updatedAt: asset.updatedAt,
+        deletedAt: asset.deletedAt,
+        fileCreatedAt: asset.fileCreatedAt,
+        localDateTime: asset.localDateTime,
+        fileModifiedAt: asset.fileModifiedAt,
+        duration: asset.duration ?? '0:00:00.00000',
+        originalFileName: asset.originalFileName,
+        // tags: asset.tags.map((tag) => tag.name),
+      };
+    });
   }
 }
