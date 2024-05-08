@@ -1,6 +1,6 @@
 package site.psvm.mapper;
 
-import site.psvm.beans.entity.Task;
+import site.psvm.beans.entity.Tag;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author LeeYiuTing
- * @since 2024-04-24
+ * @since 2024-05-08
  */
-public interface TaskMapper extends BaseMapper<Task> {
+public interface TagMapper extends BaseMapper<Tag> {
 
 }

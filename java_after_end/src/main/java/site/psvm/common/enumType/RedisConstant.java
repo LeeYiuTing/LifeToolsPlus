@@ -4,6 +4,7 @@ public enum RedisConstant {
 
     TASK_MAP("task.map", "任务列表"),
     IMAGE_PROC_QUEUE("image.proc.queue", "图片处理队列"),
+    Today_Tags("today.tags", "今日标签"),
     ;
 
 

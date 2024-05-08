@@ -1,0 +1,3 @@
+@tag
+tag,varchar,20,标签
+hot_count,int,20,热度

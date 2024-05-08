@@ -1,4 +1,4 @@
-@task
+@task-off
 unique_code,varchar,64,唯一码
 name,varchar,20,任务名称
 update_time,bigint,20,更新时间

@@ -1,4 +1,4 @@
-package site.psvm.bootStart;
+package site.psvm.configuration;
 
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

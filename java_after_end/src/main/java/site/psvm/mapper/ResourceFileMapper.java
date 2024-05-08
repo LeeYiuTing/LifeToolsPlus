@@ -1,6 +1,6 @@
 package site.psvm.mapper;
 
-import site.psvm.entity.ResourceFile;
+import site.psvm.beans.entity.ResourceFile;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

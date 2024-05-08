@@ -1,13 +1,32 @@
-package site.psvm.webs.resp;
+package site.psvm.beans.dto;
 
-public class Resp<T> {
+import java.util.List;
+
+public class ListDto<T> {
+    private List<T> data;
     private String code;
     private String msg;
-    private T data;
 
-    public void ok(T data){
+    public void ok(List<T> data) {
         this.code = "001";
         this.msg = "success";
+        this.data = data;
+    }
+
+    public void fail() {
+        this.code = "000";
+        this.msg = "fail";
+    }
+
+    public ListDto() {
+
+    }
+
+    public List<T> getData() {
+        return data;
+    }
+
+    public void setData(List<T> data) {
         this.data = data;
     }
 
@@ -25,13 +44,5 @@ public class Resp<T> {
 
     public void setMsg(String msg) {
         this.msg = msg;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
     }
 }

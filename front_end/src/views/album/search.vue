@@ -40,10 +40,10 @@
                 v-model="searchValue"
                 show-action
                 placeholder="请输入搜索关键词"
-                @search="pageList"
+                @search="search"
             >
                 <template #action>
-                    <div @click="pageList(searchValue)">搜索</div>
+                    <div @click="search">搜索</div>
                 </template>
             </van-search>
         </div>
@@ -72,18 +72,17 @@ import common from "../../util/common";
 import {ref} from 'vue';
 import TarBar from "./components/TabBar.vue";
 import data from "../../util/data";
+import DateUtil from "../../util/DateUtil";
 
 export default {
     name: "album",
     components: {TarBar},
     setup() {
         const active = ref('home');
-        const searchValue = ref('');
 
 
         return {
             active,
-            searchValue,
         };
     },
     mounted() {
@@ -99,6 +98,36 @@ export default {
         }
     },
     methods: {
+        search() {
+            let {searchValue} = this;
+            let groupedByDate = [];
+            console.log(searchValue)
+            common.post({
+                url: '/resourceFile/search',
+                params: {
+                    keyword: searchValue
+                },
+                success: (res) => {
+                    let list = res.data.data;
+                    list.forEach(item => {
+                        item.file.url = data.STATIC_SERVER + item.file.url;
+                        item.file.previewUrl = data.STATIC_SERVER + item.file.previewUrl;
+
+                        // 解析createTime并按日分组
+                        let date = DateUtil.formatDate(item.createTime);
+                        console.log(date)
+                        if (!groupedByDate[date]) {
+                            groupedByDate[date] = []; // 如果这个日期还没有初始化数组，则初始化一个
+                        }
+                        groupedByDate[date].push(item); // 将当前项添加到对应日期的数组中
+                    });
+                    console.log(groupedByDate)
+                    this.groupedByDate = groupedByDate; // 将分组后的数据赋值给dataList
+                    this.dateList = Object.keys(groupedByDate);
+                }
+            })
+        },
+
         pageList(keyword) {
             let {groupedByDate} = this;
             common.post({
@@ -106,13 +135,15 @@ export default {
                 params: {},
                 success: (res) => {
                     let list = res.data.data;
-
+                    if (list.length === 0){
+                        // TODO: 展示无数据
+                    }
                     list.forEach(item => {
                         item.file.url = data.STATIC_SERVER + item.file.url;
                         item.file.previewUrl = data.STATIC_SERVER + item.file.previewUrl;
 
                         // 解析createTime并按日分组
-                        const date = new Date(item.createTime).toDateString(); // 将createTime转换为日期字符串（忽略时间部分）
+                        let date = DateUtil.formatDate(item.createTime);
                         if (!groupedByDate[date]) {
                             groupedByDate[date] = []; // 如果这个日期还没有初始化数组，则初始化一个
                         }

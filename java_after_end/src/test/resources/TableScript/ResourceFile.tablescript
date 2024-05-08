@@ -1,4 +1,4 @@
-@resource_file
+@resource_file-off
 unique_code,varchar,64,唯一码
 name,varchar,200,文件名
 tags,varchar,200,标签json

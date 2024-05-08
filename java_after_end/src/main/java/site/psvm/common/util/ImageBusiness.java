@@ -1,8 +1,11 @@
 package site.psvm.common.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import site.psvm.bootStart.StaticPathConfig;
+import site.psvm.configuration.StaticPathConfig;
+import site.psvm.common.enumType.RedisConstant;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,13 +15,15 @@ import java.io.*;
  * 图片工具
  */
 @Component
-public class ImageUtil {
+public class ImageBusiness {
 
     private final StaticPathConfig staticPathConfig;
+    private final StringRedisTemplate redisTemplate;
 
     @Autowired
-    public ImageUtil(StaticPathConfig staticPathConfig) {
+    public ImageBusiness(StaticPathConfig staticPathConfig, StringRedisTemplate redisTemplate) {
         this.staticPathConfig = staticPathConfig;
+        this.redisTemplate = redisTemplate;
     }
 
     //保存图片
@@ -80,5 +85,13 @@ public class ImageUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 添加图片处理队列
+     * @param originalFilename 文件名
+     */
+    public void addImageProcQueen(String originalFilename) {
+        redisTemplate.opsForList().rightPush(RedisConstant.IMAGE_PROC_QUEUE.getKey(), originalFilename);
     }
 }

@@ -5,6 +5,8 @@ server:
     include-message: always
 
 spring:
+  elasticsearch:
+    uris: http://localhost:9200
   data:
     redis:
       port: 6379

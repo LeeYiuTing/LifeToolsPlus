@@ -1,4 +1,4 @@
-package site.psvm.bootStart;
+package site.psvm.configuration;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

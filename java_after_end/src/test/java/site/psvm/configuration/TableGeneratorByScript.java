@@ -1,4 +1,4 @@
-package site.psvm.bootStart;
+package site.psvm.configuration;
 
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
@@ -59,6 +59,7 @@ public class TableGeneratorByScript {
                 }
             });
 
+
             Class.forName("org.sqlite.JDBC");
             Connection connection = DriverManager.getConnection("jdbc:sqlite:test.db");
             Statement statement = connection.createStatement();
@@ -68,6 +69,10 @@ public class TableGeneratorByScript {
                 List<String> scriptRows = Files.readAllLines(path);
                 List<String[]> fieldInfoList = new ArrayList<>();
                 String tableName = "";
+                String tableNameCow = scriptRows.getFirst();
+                if (tableNameCow.endsWith("off")){
+                    continue;
+                }
                 for (int i = 0; i < scriptRows.size(); i++) {
                     String scriptRow = scriptRows.get(i);
                     if (i == 0) {
@@ -75,6 +80,7 @@ public class TableGeneratorByScript {
                         if (tableName.isEmpty()) {
                             throw new IllegalArgumentException("Table name cannot be empty");
                         }
+
                     } else {
                         String[] columns = scriptRow.split(",");
                         if (columns.length < 4) {
@@ -150,7 +156,7 @@ public class TableGeneratorByScript {
         fastAutoGenerator.globalConfig(builder -> {
             builder.author("LeeYiuTing") // 设置作者
                     .enableSwagger() // 开启 swagger 模式
-                    .outputDir("D:\\D_DEV\\Project\\LifeToolsPlus\\after_end\\src\\main\\java"); // 指定输出目录
+                    .outputDir("D:\\D_DEV\\Project\\LifeToolsPlus\\java_after_end\\src\\main\\java"); // 指定输出目录
         });
 
         //数据源配置
@@ -171,8 +177,8 @@ public class TableGeneratorByScript {
         fastAutoGenerator.packageConfig(builder -> {
             builder.parent("site.psvm") // 设置父包名
                     .controller("webs.func")
-                    .entity("entity")
-                    .pathInfo(Collections.singletonMap(OutputFile.xml, "D:\\D_DEV\\Project\\LifeToolsPlus\\after_end\\src\\main\\resources\\mapper")); // 设置mapperXml生成路径
+                    .entity("beans.entity")
+                    .pathInfo(Collections.singletonMap(OutputFile.xml, "D:\\D_DEV\\Project\\LifeToolsPlus\\java_after_end\\src\\main\\resources\\mapper")); // 设置mapperXml生成路径
         });
 
         //策略配置

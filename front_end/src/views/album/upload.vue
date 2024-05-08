@@ -56,7 +56,7 @@
             v-model="fileList"
             multiple
             :beforeRead="asyncBeforeRead"
-            :max-count="10"
+            :max-hotCount="10"
         >
             <van-icon class="upload-icon" name="photograph"/>
         </van-uploader>

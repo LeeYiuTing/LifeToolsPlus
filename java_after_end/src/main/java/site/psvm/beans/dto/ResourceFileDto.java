@@ -1,11 +1,13 @@
-package site.psvm.dto;
+package site.psvm.beans.dto;
+
+import java.util.List;
 
 public class ResourceFileDto {
     private String uniqueCode;
 
     private String name;
 
-    private String tags;
+    private List<String> tags;
 
     private FileDto file;
 
@@ -33,11 +35,11 @@ public class ResourceFileDto {
         this.name = name;
     }
 
-    public String getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(String tags) {
+    public void setTags(List<String> tags) {
         this.tags = tags;
     }
 

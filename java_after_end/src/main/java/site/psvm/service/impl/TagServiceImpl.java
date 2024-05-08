@@ -1,8 +1,8 @@
 package site.psvm.service.impl;
 
-import site.psvm.beans.entity.Task;
-import site.psvm.mapper.TaskMapper;
-import site.psvm.service.ITaskService;
+import site.psvm.beans.entity.Tag;
+import site.psvm.mapper.TagMapper;
+import site.psvm.service.ITagService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author LeeYiuTing
- * @since 2024-04-24
+ * @since 2024-05-08
  */
 @Service
-public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements ITaskService {
+public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements ITagService {
 
 }

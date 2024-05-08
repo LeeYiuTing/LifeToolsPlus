@@ -1,4 +1,4 @@
-package site.psvm.dto;
+package site.psvm.beans.dto;
 
 import java.io.Serializable;
 
