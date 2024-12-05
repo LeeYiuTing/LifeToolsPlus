@@ -79,7 +79,7 @@
                                 </div>
                                 <van-button class="bottom" size="mini" icon="add">选择</van-button>
                                 <van-button class="bottom" size="mini" icon="edit"
-                                            @click="clickInputTag(imageIndex)">输入
+                                            @click="clickInputTag(tagIndex)">输入
                                 </van-button>
                             </van-space>
                         </template>
