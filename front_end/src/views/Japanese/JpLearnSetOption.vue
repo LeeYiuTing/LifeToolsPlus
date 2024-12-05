@@ -4,21 +4,16 @@
             title="假名闯关设置"
         />
         <div class="form-title">假名选择</div>
-        <van-radio-group v-model="kanaRange">
+        <van-radio-group v-model="kanaType">
             <van-cell-group inset>
-                <van-cell title="平假" clickable @click="kanaRange = '1'">
+                <van-cell title="平假" clickable @click="kanaType = '1'">
                     <template #right-icon>
                         <van-radio name="1"/>
                     </template>
                 </van-cell>
-                <van-cell title="片假" clickable @click="kanaRange = '2'">
+                <van-cell title="片假" clickable @click="kanaType = '2'">
                     <template #right-icon>
                         <van-radio name="2"/>
-                    </template>
-                </van-cell>
-                <van-cell title="都有" clickable @click="kanaRange = '3'">
-                    <template #right-icon>
-                        <van-radio name="3"/>
                     </template>
                 </van-cell>
             </van-cell-group>
@@ -33,14 +28,14 @@
             </van-field>
         </van-cell-group>
 
-        <div class="form-title">包含混淆</div>
+<!--        <div class="form-title">包含混淆</div>
         <van-cell-group inset>
             <van-cell center :title="obfuscation ? '是' : '否'">
                 <template #right-icon>
                     <van-switch v-model="obfuscation"/>
                 </template>
             </van-cell>
-        </van-cell-group>
+        </van-cell-group>-->
 
         <van-button round type="success" size="large" @click="goLearn" class="bottom-button">Go!</van-button>
     </div>
@@ -53,7 +48,7 @@ import router from "../../router/router";
 export default {
     name: 'JpLearnSetOption',
     setup() {
-        const kanaRange = ref('1');
+        const kanaType = ref('1');
         const rowNum = ref(1);
         const obfuscation = ref(false);
 
@@ -63,7 +58,7 @@ export default {
                 {
                     path: '/JpLearn',
                     query: {
-                        kanaRange: kanaRange.value,
+                        kanaType: kanaType.value,
                         rowNum: rowNum.value,
                         obfuscation: obfuscation.value,
                     }
@@ -72,7 +67,7 @@ export default {
         };
         return {
             //data
-            kanaRange,
+            kanaType,
             rowNum,
             obfuscation,
             //func

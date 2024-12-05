@@ -1,8 +1,4 @@
-let module = {};
-
-module.STATIC_SERVER = 'http://127.0.0.1:80';
-
-module.kanaList = [
+[
     [
         {"Hiragana": "あ", "Katakana": "ア", "Romanization": "a", "audio": "/audio/kana/あ.mp3"},
         {"Hiragana": "い", "Katakana": "イ", "Romanization": "i", "audio": "/audio/kana/い.mp3"},
@@ -71,6 +67,4 @@ module.kanaList = [
     [
         {"Hiragana": "ん", "Katakana": "ン", "Romanization": "n", "audio": "/audio/kana/ん.mp3"}
     ]
-];
-
-export default module;
+]
