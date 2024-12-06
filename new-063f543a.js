@@ -1,1 +1,0 @@
-import{_ as e}from"./index-ba2ccdce.js";const t={name:"new",data(){return{goods:{title:"美国正宗大番薯（约680g/3个）",price:2680,express:"免运费",remain:100}}}};function r(n,s,a,o,c,p){return" this is a new page "}const i=e(t,[["render",r]]);export{i as default};
