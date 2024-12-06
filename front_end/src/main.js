@@ -1,5 +1,5 @@
-import { createApp } from 'vue';
-import {Button, Toast, Dialog, Col, Row, Notify} from 'vant';
+import {createApp} from 'vue';
+import {Button, Toast, Dialog, Col, Row, Notify, ConfigProvider} from 'vant';
 import router from './router/router';
 import common from './util/common';
 
@@ -19,6 +19,7 @@ app.use(Dialog);
 app.use(Col);
 app.use(Row);
 app.use(Notify);
+app.use(ConfigProvider);
 app.component(common);
 
 app.mount('#app');

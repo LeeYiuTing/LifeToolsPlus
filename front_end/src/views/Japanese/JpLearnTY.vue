@@ -1,14 +1,17 @@
 <template>
     <div class="JpLearn">
         <van-nav-bar
-            title="假名闯关"
+            title="假名听音"
+            left-text="返回"
+            left-arrow
+            @click-left="router().back()"
         />
 
         <!--进度-->
         <div class="form-title"></div>
         <div class="form-title"></div>
         <div class="step-Line">
-            <van-progress inactive :percentage="((kanaIndex-1)/rangeList.length) * 100"/>
+            <van-progress inactive :percentage="(((kanaIndex-1)/rangeList.length) * 100).toFixed(2)"/>
         </div>
         <div class="form-title"></div>
         <div class="step-text">{{ kanaIndex > rangeList.length ? rangeList.length : kanaIndex }}/{{ rangeList.length }}</div>
@@ -26,17 +29,10 @@
         </van-row>
 
         <!--功能区-->
-        <div class="form-title"></div>
-        <div class="form-title"></div>
-        <div class="form-title"></div>
-        <van-row justify="center" gutter="100">
+
+        <van-row class="lock-to-bottom" justify="center" gutter="100">
             <van-col @click="playAudio">
-                <van-icon name="play-circle-o" size="3rem" color="#24c168"/>
-                <div class="func-text">播放</div>
-            </van-col>
-            <van-col>
-                <van-icon name="replay" size="3rem" color="#24c168"/>
-                <div class="func-text">换一批</div>
+                <van-button round type="success" size="large" class="lock-to-bottom">重听</van-button>
             </van-col>
         </van-row>
     </div>
@@ -45,10 +41,10 @@
 <script>
 import common from "../../util/common";
 import router from "../../router/router";
-import kana from "/public/json/kana.json";
+import kana from "/src/public/json/kana.json";
 
 export default {
-    name: 'JpLearnSetOption',
+    name: 'JpLearnTY',
     data() {
         return {
             kanaList: kana,
@@ -73,6 +69,9 @@ export default {
         this.collectKana();
     },
     methods: {
+        router() {
+            return router
+        },
 
         /**
          * 整理假名
@@ -85,7 +84,11 @@ export default {
             let targetList = [];
             let rowList = allKana.slice(0, this.rowNum)
             rowList.forEach(row=>{
-                targetList.push(...row);
+                row.forEach(item=>{
+                    if (item.Hiragana) {
+                        targetList.push(item);
+                    }
+                })
             })
             console.log(this.kanaType)
             targetList.forEach(item => {
@@ -201,7 +204,7 @@ export default {
 
 <style scoped lang="less">
 .JpLearn {
-
+    height: 100%;
     .step-text {
         //居中
         text-align: center;
@@ -237,7 +240,7 @@ export default {
         //换行
         flex-wrap: wrap;
 
-        width: 500px;
+        width: 100%;
     }
 
     .alias-text {

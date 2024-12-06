@@ -10,7 +10,7 @@ export default {
     }),
   ],
   server: {
-    host: '127.0.0.1',
+    host: '192.168.2.236',
     port: 8023,
   }
 };
