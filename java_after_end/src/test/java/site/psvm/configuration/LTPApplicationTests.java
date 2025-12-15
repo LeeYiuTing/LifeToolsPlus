@@ -8,6 +8,8 @@ import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.Query;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import site.psvm.beans.EsDoc.ResourceFileDoc;
 
 import java.util.List;
@@ -18,6 +20,9 @@ import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 class LTPApplicationTests {
 
     private final ElasticsearchRestTemplate esRestTemplate;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Autowired
     LTPApplicationTests(ElasticsearchRestTemplate esRestTemplate) {
@@ -35,6 +40,12 @@ class LTPApplicationTests {
         searchHits.forEach(searchHit -> {
             ResourceFileDoc content = searchHit.getContent();
         });
+    }
+
+    @Test
+    public void tt02 () {
+        ZSetOperations<String, String> zSetOps = redisTemplate.opsForZSet();
+        zSetOps.add("tempQueue", "hahaha", System.currentTimeMillis() + 30*24*60*60*1000L); //过期时间为30天后
     }
 
 }

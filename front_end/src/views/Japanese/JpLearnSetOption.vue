@@ -70,7 +70,7 @@
 <script>
 import {ref} from 'vue';
 import router from "../../router/router";
-import hanaList from "/src/public/json/kana.json";
+import hanaList from "/src/config/kana.json";
 
 export default {
     name: 'JpLearnSetOption',

@@ -1,9 +1,11 @@
 import axios from 'axios';
+import data from './data'
+
 import {showConfirmDialog, showFailToast, showLoadingToast, showNotify, showSuccessToast, showToast} from 'vant';
 
 let module = {};
-
-const server = 'http://localhost:8024';
+const server = data.ApiService
+console.log( server)
 
 // 通过form-data上传文件的请求
 module.uploadToServer = (options) => {
@@ -27,9 +29,10 @@ module.post = (options) => {
     let {url, params, success, fail} = options;
     url = server + url;
     axios.post(url, params).then(res => {
-        success && success(res);
+        success && success(res.data);
     }).catch(err => {
-        module.showTips(err.msg, 'fail')
+        module.showTips("服务异常", 'fail')
+        console.log('errInfo',err)
         fail && fail(err);
     });
 }
@@ -40,7 +43,7 @@ module.post = (options) => {
  * @param type 类型
  * @param icon 图标
  */
-module.showTips = (msg, type, icon) => {
+module.showTips = (msg, type=null, icon=null) => {
     if (!type && !icon) {
         //仅文字
         showToast(msg);

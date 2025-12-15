@@ -34,52 +34,82 @@
             }
         }
     }
+
+    .upload-center-btn-wrap {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 0;
+        z-index: 10;
+    }
+
+    .upload-center-btn {
+        width: 180px;
+        height: 60px;
+        font-size: 22px;
+        border-radius: 32px;
+        background: #f5f7fa;
+        color: #36d1c4;
+        border: 1.5px solid #e0e0e0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+        transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .upload-center-btn:active {
+        background: #e6f7f7;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+}
+
+.app.tabBar-app {
+    position: relative;
+    min-height: 60vh;
 }
 </style>
 
 <template>
     <!--标题栏-->
-    <van-nav-bar
-        title="上传"
-        left-text=""
-        right-text=""
-        left-arrow
-        @click-left=""
-        @click-right=""
-    />
+    <van-nav-bar title="上传" left-text="" right-text="" left-arrow @click-left="" @click-right="" />
     <div class="app tabBar-app">
-        <van-divider content-position="center">选择上传图片</van-divider>
+        <!-- <van-divider content-position="center">选择上传图片</van-divider> -->
+
+        <!--自定义大按钮触发上传-->
+        <div class="upload-center-btn-wrap" v-if="fileList.length === 0">
+            <van-button class="upload-center-btn" type="primary" icon="plus" @click="triggerUploader">选择图片</van-button>
+        </div>
 
         <!--上传组件-->
-        <van-uploader
-            class="upload-group"
-            v-model="fileList"
-            multiple
-            :beforeRead="asyncBeforeRead"
-            :max-hotCount="10"
-        >
-            <van-icon class="upload-icon" name="photograph"/>
+        <van-uploader ref="uploaderRef" class="upload-group" v-model="fileList" multiple :beforeRead="asyncBeforeRead"
+            :max-hotCount="10" :show-upload="false">
+            <van-icon v-if="fileList.length > 0" class="upload-icon" name="photograph" />
         </van-uploader>
 
-        <div class="image-info" v-if="fileList.length>0">
+        <div class="image-info" v-if="fileList.length > 0">
             <van-divider content-position="center">统一标签设置</van-divider>
             <div class="image-info-form">
                 <van-cell-group>
                     <van-field label="标签">
                         <template #input>
-                            <van-space wrap :size="[10,6]">
-                                <div v-for="(item,tagIndex) in 6">
+                            <van-space wrap :size="[10, 6]">
+                                <div v-for="(item, tagIndex) in unifyTag">
                                     <van-badge>
-                                        <van-tag class="tag bottom" plain type="primary">hhhh</van-tag>
+                                        <van-tag class="tag bottom" plain type="primary">{{ item }}</van-tag>
                                         <template #content>
-                                            <van-icon name="cross" class="badge-icon"
-                                                      @click="delTag(tagIndex)"/>
+                                            <van-icon name="cross" class="badge-icon" @click="delTag(undefined)" />
                                         </template>
                                     </van-badge>
                                 </div>
                                 <van-button class="bottom" size="mini" icon="add">选择</van-button>
-                                <van-button class="bottom" size="mini" icon="edit"
-                                            @click="clickInputTag(tagIndex)">输入
+                                <van-button class="bottom" size="mini" icon="edit" @click="clickInputTag(undefined)">输入
                                 </van-button>
                             </van-space>
                         </template>
@@ -88,31 +118,31 @@
             </div>
         </div>
 
-        <div class="image-info" v-if="fileList.length>0">
+        <div class="image-info" v-if="fileList.length > 0">
             <van-divider content-position="center">独立标签设置</van-divider>
-            <div class="image-info-form" v-for="(item,imageIndex) in fileList">
+            <div class="image-info-form" v-for="(item, imageIndex) in fileList">
                 <van-form @submit="">
                     <van-cell-group>
-                        <van-field :label="'图片'+(imageIndex+1)">
+                        <van-field :label="'图片' + (imageIndex + 1)">
                             <template #input>
-                                <van-image class="image" fit="cover" :src="item.objectUrl"/>
+                                <van-image class="image" fit="cover" :src="item.objectUrl" />
                             </template>
                         </van-field>
                         <van-field label="标签">
                             <template #input>
-                                <van-space wrap :size="[10,6]">
-                                    <div v-for="(item,tagIndex) in item.file.tags">
+                                <van-space wrap :size="[10, 6]">
+                                    <div v-for="(item, tagIndex) in item.file.tags">
                                         <van-badge>
                                             <van-tag class="tag bottom" plain type="primary">{{ item }}</van-tag>
                                             <template #content>
                                                 <van-icon name="cross" class="badge-icon"
-                                                          @click="delTag(imageIndex,tagIndex)"/>
+                                                    @click="delTag(imageIndex, tagIndex)" />
                                             </template>
                                         </van-badge>
                                     </div>
                                     <van-button class="bottom" size="mini" icon="add">选择</van-button>
                                     <van-button class="bottom" size="mini" icon="edit"
-                                                @click="clickInputTag(imageIndex)">输入
+                                        @click="clickInputTag(imageIndex)">输入
                                     </van-button>
                                 </van-space>
                             </template>
@@ -128,16 +158,12 @@
         </div>
 
         <!-- 下方弹出 -->
-        <van-popup
-            v-model:show="showTagInput"
-            position="bottom"
-            :style="{ height: '25%' }"
-        >
+        <van-popup v-model:show="showTagInput" position="bottom" :style="{ height: '25%' }">
             <template #default>
                 <van-form>
                     <van-divider content-position="center">自定义标签</van-divider>
                     <van-cell-group inset>
-                        <van-field v-model="tempTagName" label="标签名" placeholder="使用空格分隔多个标签"/>
+                        <van-field v-model="tempTagName" label="标签名" placeholder="使用空格分隔多个标签" />
                     </van-cell-group>
                 </van-form>
                 <div style="margin: 16px;">
@@ -155,14 +181,16 @@
 
 <script setup>
 import TarBar from "./components/TabBar.vue";
-import {ref, triggerRef, watch} from "vue";
+import { ref, triggerRef, watch } from "vue";
 import common from "../../util/common";
 import router from "../../router/router";
 
 const fileList = ref([]);
+const unifyTag = ref([]);
 let showTagInput = ref(false);
 let tempTagName = ref('');
 let currentEditImage = ref(null);
+const uploaderRef = ref();
 
 // 上传检查方法
 const asyncBeforeRead = async (files) => {
@@ -189,7 +217,7 @@ const asyncBeforeRead = async (files) => {
                         // 将Canvas内容转换为JPG
                         canvas.toBlob((blob) => {
                             // 创建一个新的File对象
-                            const newFile = new File([blob], file.name.replace('.webp', '.jpg'), {type: 'image/jpeg'});
+                            const newFile = new File([blob], file.name.replace('.webp', '.jpg'), { type: 'image/jpeg' });
                             // 这里可以继续处理新的JPG文件
                             console.log('Conversion successful, new file:', newFile);
                             common.showTips('已将webp自动转为jpg', 'success');
@@ -230,30 +258,48 @@ const asyncBeforeRead = async (files) => {
 //点击手动输入标签
 const clickInputTag = (index) => {
     showTagInput.value = true;
-    currentEditImage.value = index;
+    if (index === undefined) {
+        currentEditImage.value = null;
+    } else {
+        currentEditImage.value = index;
+    }
 }
 
 //手动添加标签
 const addTag = () => {
-    let value = tempTagName.value;
+    //前后去空格
+    let value = tempTagName.value.trim();
     if (!value) {
         showTagInput.value = false;
         return;
     }
-    let target = fileList.value[currentEditImage.value];
-
     const tags = value.split(' ');
-    tags.forEach(item => {
-        target.file.tags.push(item);
-    });
+    if (currentEditImage.value === null) {
+        tags.forEach(item => {
+            unifyTag.value.push(item);
+        });
+        //去重一下
+        unifyTag.value = [...new Set(unifyTag.value)];
+    } else {
+        let target = fileList.value[currentEditImage.value];
+        tags.forEach(item => {
+            target.file.tags.push(item);
+        });
+        //去重一下
+        target.file.tags = [...new Set(target.file.tags)];
+    }
     showTagInput.value = false;
 }
 
 //删除标签
 const delTag = (imageIndex, tagIndex) => {
-    let target = fileList.value[imageIndex];
-    target.file.tags.splice(tagIndex, 1);
-    triggerRef(fileList);
+    if (imageIndex === undefined) {
+        unifyTag.value.splice(tagIndex, 1);
+    } else {
+        let target = fileList.value[imageIndex];
+        target.file.tags.splice(tagIndex, 1);
+        triggerRef(fileList);
+    }
 }
 
 watch(showTagInput, (newVal, oldVal) => {
@@ -290,5 +336,11 @@ const submit = () => {
         })
     })
 }
+
+const triggerUploader = () => {
+    if (uploaderRef.value) {
+        uploaderRef.value.chooseFile();
+    }
+};
 
 </script>

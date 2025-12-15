@@ -14,6 +14,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,10 +26,10 @@ import java.util.List;
 public class TableGeneratorByScript {
 
     public static void main(String[] args) throws URISyntaxException, IOException {
-        generatorTable();
+        generatorTableOfScript();
     }
 
-    private static void generatorTable() throws URISyntaxException, IOException {
+    private static void generatorTableOfScript() throws URISyntaxException, IOException {
         try {
             String scriptPackagePath = "TableScript";
             // 获取当前类加载器
@@ -70,7 +71,8 @@ public class TableGeneratorByScript {
                 List<String[]> fieldInfoList = new ArrayList<>();
                 String tableName = "";
                 String tableNameCow = scriptRows.getFirst();
-                if (tableNameCow.endsWith("off")){
+                if (tableNameCow.endsWith("skip")){
+                    System.out.println("Table "+tableName+" is off");
                     continue;
                 }
                 for (int i = 0; i < scriptRows.size(); i++) {
@@ -139,7 +141,10 @@ public class TableGeneratorByScript {
                 System.out.println(sql);
                 statement.executeUpdate(sql);
                 System.out.println("Table created for class: " + tableName);
-                generateCode(tableName);
+                //generateCode(tableName);
+
+                //给相应script第一行添加-skip
+                Files.write(path, Collections.singletonList(tableNameCow + "-skip"), StandardOpenOption.TRUNCATE_EXISTING);
             }
 
             statement.close();

@@ -20,4 +20,8 @@ public enum EsIndex {
     public String toString() {
         return getName();
     }
+
+    public String getDesc() {
+        return desc;
+    }
 }

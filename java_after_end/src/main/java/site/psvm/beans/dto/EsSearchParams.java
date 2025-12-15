@@ -1,6 +1,12 @@
 package site.psvm.beans.dto;
 
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
+
+import java.util.List;
 
 /**
  * ElasticSearch 查询参数
@@ -9,7 +15,8 @@ import org.elasticsearch.index.query.QueryBuilder;
 public class EsSearchParams <T>{
     private Integer pageNo;
     private Integer pageSize;
-    private QueryBuilder query;
+    private List<QueryBuilder> queryBuilderList;
+    private List<FieldSortBuilder> sortOrderList;
     private Class<T> clazz;
 
     public Integer getPageNo() {
@@ -28,12 +35,20 @@ public class EsSearchParams <T>{
         this.pageSize = pageSize;
     }
 
-    public QueryBuilder getQuery() {
-        return query;
+    public List<QueryBuilder> getQueryBuilderList() {
+        return queryBuilderList;
     }
 
-    public void setQuery(QueryBuilder query) {
-        this.query = query;
+    public void setQueryBuilderList(List<QueryBuilder> queryBuilderList) {
+        this.queryBuilderList = queryBuilderList;
+    }
+
+    public List<FieldSortBuilder> getSortOrderList() {
+        return sortOrderList;
+    }
+
+    public void setSortOrderList(List<FieldSortBuilder> sortOrderList) {
+        this.sortOrderList = sortOrderList;
     }
 
     public Class<T> getClazz() {

@@ -1,5 +1,8 @@
-import {createApp} from 'vue';
-import {Button, Toast, Dialog, Col, Row, Notify, ConfigProvider} from 'vant';
+import { createApp } from 'vue';
+import { ImagePreview } from 'vant';
+import { Button, Toast, Dialog, Col, Row, Notify, ConfigProvider } from 'vant';
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
 import router from './router/router';
 import common from './util/common';
 
@@ -19,7 +22,9 @@ app.use(Dialog);
 app.use(Col);
 app.use(Row);
 app.use(Notify);
+app.use(ElementPlus);
 app.use(ConfigProvider);
+app.use(ImagePreview);
 app.component(common);
 
 app.mount('#app');

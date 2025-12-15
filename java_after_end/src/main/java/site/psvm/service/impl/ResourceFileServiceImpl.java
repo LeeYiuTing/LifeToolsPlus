@@ -2,8 +2,16 @@ package site.psvm.service.impl;
 
 import cn.hutool.core.lang.UUID;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
@@ -43,6 +51,8 @@ import static site.psvm.common.util.GsonUtils.OBJ_TO_JSON;
 @Service
 public class ResourceFileServiceImpl extends ServiceImpl<ResourceFileMapper, ResourceFile> implements IResourceFileService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ResourceFileServiceImpl.class);
+
     private final StaticPathConfig staticPathConfig;
     private final ImageBusiness imageBusiness;
     private final ElasticService elasticService;
@@ -57,7 +67,6 @@ public class ResourceFileServiceImpl extends ServiceImpl<ResourceFileMapper, Res
         this.redisTemplate = stringRedisTemplate;
         this.tagMapper = tagMapper;
     }
-
 
     @Override
     public List<ResourceFileDto> getImageList(int pageNo, int pageSize) {
@@ -90,12 +99,15 @@ public class ResourceFileServiceImpl extends ServiceImpl<ResourceFileMapper, Res
             params.setPageNo(pageNo);
             params.setPageSize(pageSize);
             params.setClazz(ResourceFileDoc.class);
+            ArrayList<QueryBuilder> queryBuilders = new ArrayList<>();
             if (null != tagKeyword && !tagKeyword.isEmpty()){
-                params.setQuery(QueryBuilders.termQuery("tags", tagKeyword));
+                queryBuilders.add(QueryBuilders.termQuery("tags", tagKeyword));
             } else {
-                params.setQuery(QueryBuilders.matchAllQuery());
+                queryBuilders.add(QueryBuilders.matchAllQuery());
             }
-
+            params.setQueryBuilderList(queryBuilders);
+            //时间倒序
+            params.setSortOrderList(List.of(SortBuilders.fieldSort("createTime").order(SortOrder.DESC)));
             List<ResourceFileDoc> esResult = elasticService.search(params);
             if(!esResult.isEmpty()){
                 List<ResourceFileDto> list = new ArrayList<>();
@@ -154,7 +166,7 @@ public class ResourceFileServiceImpl extends ServiceImpl<ResourceFileMapper, Res
             //处理标签
             this.procTag(tags);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("ResourceFileServiceImpl,saveFile,error,{}, {}",file, tags,e);
         }
         return result.ok(null);
     }
@@ -166,7 +178,7 @@ public class ResourceFileServiceImpl extends ServiceImpl<ResourceFileMapper, Res
     @Async
     public void procTag(List<String> tags){
         try{
-            if(!tags.isEmpty()){
+            if(!CollectionUtils.isEmpty(tags)){
                 //检测数据库有无
                 for (String tag : tags) {
                     LambdaQueryWrapper<Tag> lqw = new LambdaQueryWrapper<>();
@@ -188,7 +200,7 @@ public class ResourceFileServiceImpl extends ServiceImpl<ResourceFileMapper, Res
                 }
             }
         }catch(Exception e){
-            e.printStackTrace();
+            logger.error("ResourceFileServiceImpl,procTag,error,{}",tags,e);
         }
     }
 }

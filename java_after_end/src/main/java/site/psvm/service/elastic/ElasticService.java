@@ -2,15 +2,22 @@ package site.psvm.service.elastic;
 
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.mapping.MappingException;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import site.psvm.beans.dto.EsSearchParams;
 
 import java.util.ArrayList;
@@ -32,20 +39,22 @@ public class ElasticService {
         this.esRestTemplate = restTemplate;
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(ElasticService.class);
+
     public void save(Object document) {
         try {
             esRestTemplate.save(document);
         } catch (MappingException e) {
-            e.printStackTrace();
-
+            logger.error("ElasticService,save,error,{}",document,e);
         }
     }
 
-    public <T> List<T> search(EsSearchParams params) {
+    public <T> List<T> search(EsSearchParams<T> params) {
         Integer pageNo = params.getPageNo();
         Integer pageSize = params.getPageSize();
-        QueryBuilder queryBuilder = params.getQuery();
+        List<QueryBuilder> queryBuilderList = params.getQueryBuilderList();
         Class<T> clazz = params.getClazz();
+        SortBuilders.fieldSort("timestamp").order(SortOrder.DESC);
 
         // 处理分页参数，默认值为第1页，每页10条记录
         pageNo = (pageNo == null) ? 1 : pageNo;
@@ -54,10 +63,26 @@ public class ElasticService {
         int effectivePageNumber = pageNo - 1;
 
         // 处理查询构建器的空值情况
-        QueryBuilder queryCondition = (queryBuilder == null) ? matchAllQuery() : queryBuilder;
-        Query query = new NativeSearchQueryBuilder()
-                .withQuery(queryCondition)
-                .build();
+        if (CollectionUtils.isEmpty(queryBuilderList)) {
+            queryBuilderList = new ArrayList<>();
+            queryBuilderList.add(matchAllQuery());
+        }
+
+        // 处理查询条件
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        for (QueryBuilder queryBuilder : queryBuilderList) {
+            builder.withQuery(queryBuilder);
+        }
+
+        // 处理排序
+        if (!CollectionUtils.isEmpty(params.getSortOrderList())){
+            for (FieldSortBuilder sortOrder : params.getSortOrderList()) {
+                builder.withSort(sortOrder);
+            }
+        }
+
+        // 构建查询
+        NativeSearchQuery query = builder.build();
 
         // 设置分页请求
         PageRequest pageable = PageRequest.of(effectivePageNumber, pageSize);
@@ -72,8 +97,7 @@ public class ElasticService {
                 results.add(hit.getContent());
             }
         } catch (Exception e) {
-            // 可以根据实际情况记录日志或者抛出自定义异常
-            e.printStackTrace();
+            logger.error("ElasticService,search,error,{}",params,e);
             // 根据需求处理异常，例如返回空列表或特定异常
             return new ArrayList<>();
         }

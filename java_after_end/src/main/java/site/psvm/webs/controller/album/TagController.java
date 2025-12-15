@@ -1,4 +1,4 @@
-package site.psvm.webs.func;
+package site.psvm.webs.controller.album;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import site.psvm.beans.dto.TagDto;
 import site.psvm.common.enumType.RedisConstant;
 import site.psvm.common.util.DateTimeUtils;
-import site.psvm.webs.resp.Resp;
+import site.psvm.beans.common.Resp;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -38,7 +38,6 @@ public class TagController {
      */
     @RequestMapping("/hot")
     public Resp<List<TagDto>> getHotTagList() {
-        Resp<List<TagDto>> result = new Resp<List<TagDto>>();
         Map<Object, Object> tags = stringRedisTemplate.opsForHash().entries(RedisConstant.Today_Tags.getKey() + DateTimeUtils.getToday(0));
         ArrayList<TagDto> tagDtos = new ArrayList<>();
         tags.forEach((k, v) -> {
@@ -50,8 +49,7 @@ public class TagController {
             tagDtos.add(tagDto);
         });
         tagDtos.sort(Comparator.comparing(TagDto::getHotCount));
-        result.ok(tagDtos);
-        return result;
+        return Resp.ok(tagDtos);
     }
 
 }

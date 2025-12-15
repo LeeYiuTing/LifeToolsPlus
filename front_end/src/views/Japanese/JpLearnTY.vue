@@ -41,7 +41,7 @@
 <script>
 import common from "../../util/common";
 import router from "../../router/router";
-import kana from "/src/public/json/kana.json";
+import kana from "/src/config/kana.json";
 
 export default {
     name: 'JpLearnTY',

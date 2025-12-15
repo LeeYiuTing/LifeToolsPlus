@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 
 /**
- * 图片工具
+ * 图片处理工具
  */
 @Component
 public class ImageBusiness {
@@ -61,20 +61,25 @@ public class ImageBusiness {
 
             double aspectRatio = (double) sourceWidth / sourceHeight;
 
-            int thumbnailWidth = 300;
-            int thumbnailHeight = (int) (thumbnailWidth / aspectRatio);
+            int maxWidth = 500;
+            int maxHeight = 600;
+            int newWidth = sourceWidth;
+            int newHeight = sourceHeight;
 
-            if (thumbnailHeight > 300) {
-                thumbnailHeight = 300;
-                thumbnailWidth = (int) (thumbnailHeight * aspectRatio);
+            if (sourceWidth > maxWidth || sourceHeight > maxHeight) {
+                double widthRatio = (double) maxWidth / sourceWidth;
+                double heightRatio = (double) maxHeight / sourceHeight;
+                double ratio = Math.min(widthRatio, heightRatio);
+                newWidth = (int) (sourceWidth * ratio);
+                newHeight = (int) (sourceHeight * ratio);
             }
 
-            BufferedImage thumbnailImage = new BufferedImage(thumbnailWidth, thumbnailHeight, BufferedImage.TYPE_INT_RGB);
+            BufferedImage thumbnailImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = thumbnailImage.createGraphics();
             graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            graphics.drawImage(sourceImage, 0, 0, thumbnailWidth, thumbnailHeight, null);
+            graphics.drawImage(sourceImage, 0, 0, newWidth, newHeight, null);
             graphics.dispose();
 
             ImageIO.write(thumbnailImage, "jpg", new File(compressFilePath));

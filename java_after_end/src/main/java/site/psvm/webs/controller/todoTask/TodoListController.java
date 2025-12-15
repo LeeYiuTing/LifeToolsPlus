@@ -1,4 +1,4 @@
-package site.psvm.webs.func;
+package site.psvm.webs.controller.todoTask;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.psvm.common.enumType.RedisConstant;
 import site.psvm.beans.entity.Task;
-import site.psvm.webs.resp.Resp;
+import site.psvm.beans.common.Resp;
 import site.psvm.webs.base.BaseController;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class TodoListController extends BaseController {
             tasks.add(JSON_TO_OBJ(value, Task.class));
         }
         tasks.sort(Comparator.comparing(Task::getCreateTime));
-        return packResp("200","查询成功",tasks);
+        return Resp.ok(tasks);
     }
 
     // 新增task

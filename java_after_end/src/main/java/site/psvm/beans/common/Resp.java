@@ -1,14 +1,28 @@
-package site.psvm.webs.resp;
+package site.psvm.beans.common;
 
 public class Resp<T> {
     private String code;
     private String msg;
     private T data;
 
-    public void ok(T data){
-        this.code = "001";
-        this.msg = "success";
-        this.data = data;
+    public Resp() {
+    }
+
+
+
+    public static <T> Resp<T> ok(T data) {
+        Resp<T> resp = new Resp<T>();
+        resp.setCode("001");
+        resp.setMsg("success");
+        resp.setData(data);
+        return resp;
+    }
+
+    public static <T> Resp<T> fail() {
+        Resp<T> resp = new Resp<T>();
+        resp.setCode("000");
+        resp.setMsg("fail");
+        return resp;
     }
 
     public String getCode() {

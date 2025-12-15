@@ -20,7 +20,7 @@
                 <div class="alias-layout">
                     <div class="column-container" v-for="(item,index) in completeKanaList">
                         <div class="alias-text"  @click="playAudio(item.audio)">
-                            {{ item.Hiragana }}
+                            {{ kanaType === 1 ? item.Hiragana : item.Katakana}}
                         </div>
                         <div class="alias-text">
                             <van-image v-if="item.txImage" :src="item.txImage" />
@@ -65,7 +65,7 @@
 <script>
 import common from "../../util/common";
 import router from "../../router/router";
-import kana from "/src/public/json/kana.json";
+import kana from "/src/config/kana.json";
 
 export default {
     name: 'JpLearnTX',

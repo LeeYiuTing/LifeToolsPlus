@@ -1,4 +1,4 @@
-package site.psvm.webs.func;
+package site.psvm.webs.controller.album;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -12,7 +12,8 @@ import site.psvm.beans.dto.ObjectDto;
 import site.psvm.beans.dto.ResourceFileDto;
 import site.psvm.service.IResourceFileService;
 import site.psvm.webs.base.BaseController;
-import site.psvm.webs.resp.Resp;
+import site.psvm.beans.common.Resp;
+import site.psvm.webs.request.ResourceFileSearchRequest;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author LeeYiuTing
@@ -43,15 +44,17 @@ public class ResourceFileController extends BaseController {
 
     /**
      * 上传文件
+     *
      * @param file
      * @param tags
      * @return
      * @throws IOException
      */
     @RequestMapping("/add")
-    public Resp<Void> addResourceFile(@RequestParam("file") MultipartFile file,@RequestParam(value = "tags",required = false) List<String> tags) throws IOException {
+    public Resp<Void> addResourceFile(@RequestParam("file") MultipartFile file, @RequestParam(value = "tags", required = false) List<String> tags) throws IOException {
         if (!file.isEmpty()) {
             ObjectDto<Void> result = resourceFileService.saveFile(file, tags);
+
             return packResp(result.getCode(), result.getMsg(), null);
         } else {
             return packResp("201", "你没有上传图片", null);
@@ -64,21 +67,23 @@ public class ResourceFileController extends BaseController {
     @RequestMapping("/list")
     public Resp<List<ResourceFileDto>> getResourceFileList() {
         ListDto<ResourceFileDto> imageListForEs = resourceFileService.getImageListForEs(1, 20, null);
+
         return packResp("200", "success", imageListForEs.getData());
     }
 
     /**
      * 图片搜索
-     * @param params
+     * @param request
      * @return
      */
     @RequestMapping("/search")
-    public Resp<List<ResourceFileDto>> search(@RequestBody Map<String,String> params) {
-        String keyword = params.get("keyword");
-        ListDto<ResourceFileDto> imageListForEs = resourceFileService.getImageListForEs(1, 20, keyword);
+    public Resp<List<ResourceFileDto>> search(@RequestBody ResourceFileSearchRequest request) {
+        String keyword = request.getKeyword();
+        int page = request.getPage();
+        int size = request.getSize();
+        ListDto<ResourceFileDto> imageListForEs = resourceFileService.getImageListForEs(page, size, keyword);
         return packResp("200", "success", imageListForEs.getData());
     }
-
 
 
 }

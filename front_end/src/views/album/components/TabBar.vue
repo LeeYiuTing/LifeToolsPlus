@@ -1,9 +1,9 @@
 <!-- TabBar.vue -->
 <template>
-    <van-tabbar v-model="localActive" >
-        <van-tabbar-item name="search" to="/album" icon="search">搜索</van-tabbar-item>
-        <van-tabbar-item name="upload" to="/album/upload" icon="home-o">上传</van-tabbar-item>
-        <van-tabbar-item name="tag" icon="friends-o">标签管理</van-tabbar-item>
+    <van-tabbar v-model="localActive" @change="handleChange">
+        <van-tabbar-item name="search" to="/album/search" icon="search">搜索</van-tabbar-item>
+        <!-- <van-tabbar-item name="upload" to="/album/upload" icon="home-o">上传</van-tabbar-item> -->
+        <van-tabbar-item name="tagPage" to="/album/tagPage" icon="friends-o">标签管理</van-tabbar-item>
         <van-tabbar-item name="setting" icon="setting-o">设置</van-tabbar-item>
     </van-tabbar>
 </template>
@@ -24,12 +24,13 @@ export default {
         };
     },
     methods: {
-
+        handleChange(name) {
+            this.localActive = name;
+            console.log('name', name);
+        }
     },
     watch: {
-        active(newVal) {
-            this.localActive = newVal;
-        }
+
     }
 };
 </script>

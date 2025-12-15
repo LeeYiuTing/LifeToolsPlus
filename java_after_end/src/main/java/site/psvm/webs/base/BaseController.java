@@ -1,6 +1,6 @@
 package site.psvm.webs.base;
 
-import site.psvm.webs.resp.Resp;
+import site.psvm.beans.common.Resp;
 
 /**
  * Controller通用方法
